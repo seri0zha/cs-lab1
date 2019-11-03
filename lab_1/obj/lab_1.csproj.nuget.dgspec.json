@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\CS-course\\lab_1\\lab_1\\lab_1.csproj": {}
+    "D:\\CS-course\\lab_1\\cs-lab1\\lab_1\\lab_1.csproj": {}
   },
   "projects": {
-    "D:\\CS-course\\lab_1\\lab_1\\lab_1.csproj": {
+    "D:\\CS-course\\lab_1\\cs-lab1\\lab_1\\lab_1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\CS-course\\lab_1\\lab_1\\lab_1.csproj",
+        "projectUniqueName": "D:\\CS-course\\lab_1\\cs-lab1\\lab_1\\lab_1.csproj",
         "projectName": "lab_1",
-        "projectPath": "D:\\CS-course\\lab_1\\lab_1\\lab_1.csproj",
+        "projectPath": "D:\\CS-course\\lab_1\\cs-lab1\\lab_1\\lab_1.csproj",
         "packagesPath": "C:\\Users\\ise20\\.nuget\\packages\\",
-        "outputPath": "D:\\CS-course\\lab_1\\lab_1\\obj\\",
+        "outputPath": "D:\\CS-course\\lab_1\\cs-lab1\\lab_1\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\ise20\\AppData\\Roaming\\NuGet\\NuGet.Config",
