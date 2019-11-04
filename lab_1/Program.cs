@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 namespace lab_1
 {
@@ -11,7 +10,7 @@ namespace lab_1
             UserInterface(ref Notebook.notes);
         }
 
-        static void UserInterface(ref Dictionary<int, Note> notes)
+        static void UserInterface(ref Dictionary<int, Note> notes) // Метод взаимодействия с пользователем
         {
             Console.WriteLine("Добро пожаловать в записную книжку.");
             while (true)
@@ -112,20 +111,9 @@ namespace lab_1
             }
             Console.Clear();
             return note;
-        }
+        } // Создание записи
 
-        static bool CheckNumber(string number)
-        {
-            foreach(char c in number)
-            {
-                if (c < '0' || c > '9')
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-        static void RemoveNote(Dictionary<int, Note> notes, int id)
+        static void RemoveNote(Dictionary<int, Note> notes, int id) // Удаление записи
         {
             if (notes.ContainsKey(id))
             {
@@ -138,7 +126,7 @@ namespace lab_1
             }
         }
 
-        static void EditNote(Dictionary<int, Note> notes, int id)
+        static void EditNote(Dictionary<int, Note> notes, int id) // Редактирование записи
         {
             if (notes.ContainsKey(id))
             {
@@ -163,7 +151,7 @@ namespace lab_1
                 Console.WriteLine("Ошибка! Запись с ID " + id + " не найдена.");
             }
         }
-        public static string CreateField(bool isRequired)
+        public static string CreateField(bool isRequired) // Создание поля записи
         {
             if (isRequired)
             {
@@ -186,7 +174,7 @@ namespace lab_1
             }
         }
 
-        static void ReadNote(Dictionary<int, Note> notes, int id = 0)
+        static void ReadNote(Dictionary<int, Note> notes, int id = 0) // Вывод на экран одной записи
         {
             if (notes.ContainsKey(id))
             {
@@ -204,7 +192,7 @@ namespace lab_1
             }
         }
 
-        static void ShowAllNotes(Dictionary<int, Note> notes)
+        static void ShowAllNotes(Dictionary<int, Note> notes) // Вывод на экран всех записей
         {
             if (notes.Count == 0)
             {
@@ -226,9 +214,9 @@ namespace lab_1
                     Console.WriteLine("--------------------------------------");
                 }
             }
-        }
+        } 
 
-        static int ReadId()
+        static int ReadId() // Считывание ID введенного пользователем
         {
             int id;
             while (true)
@@ -243,12 +231,18 @@ namespace lab_1
                     return Int32.Parse(input);
                 }
             }
-        }
+        } 
+
+        static bool CheckNumber(string number) // Проверка номера
+        {
+            foreach (char c in number)
+            {
+                if (c < '0' || c > '9')
+                {
+                    return false;
+                }
+            }
+            return true;
+        } 
     }
 }
-
-/* TODO
- * Добавить защиту от дурака при вводе - переделать ввод ID - DONE
- * Проверка телефона - состоит только из цифр   
- * Переделать вывод информации записи - DONE
- */
