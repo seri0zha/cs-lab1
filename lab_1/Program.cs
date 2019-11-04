@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 namespace lab_1
 {
@@ -12,34 +13,12 @@ namespace lab_1
         static Note CreateNote()
         {
             Note note = new Note();
-
-            Console.WriteLine("Фамилия: ");
-            note.fields.Add("Фамилия", CreateField(true));
-
-            Console.WriteLine("Имя: ");
-            note.fields.Add("Имя", CreateField(true));
-
-            Console.WriteLine("Отчество: ");
-            note.fields.Add("Отчество", CreateField(false));
-
-            Console.WriteLine("Номер телефона: ");
-            note.fields.Add("Номер телефона", CreateField(true));
-
-            Console.WriteLine("Страна: ");
-            note.fields.Add("Страна", CreateField(true));
-
-            Console.WriteLine("Дата рождения: ");
-            note.fields.Add("Дата рождения", CreateField(false));
-
-            Console.WriteLine("Организация: ");
-            note.fields.Add("Организация", CreateField(false));
-
-            Console.WriteLine("Должность: ");
-            note.fields.Add("Должность", CreateField(false));
-
-            Console.WriteLine("Другие заметки: ");
-            note.fields.Add("Другие заметки", CreateField(false));
-
+            
+            foreach(var field in Note.fieldsList) // Добавление полей в запись
+            {
+                Console.WriteLine(field.Key + ": ");
+                note.fields.Add(field.Key, CreateField(field.Value));
+            }
             Console.Clear();
             return note;
         }
@@ -93,13 +72,20 @@ namespace lab_1
 
         static void ReadNote(Dictionary<int, Note> notes, int id = 0)
         {
-            Console.WriteLine("--------------------------------------");
-            Console.WriteLine("ID: " + id);
-            foreach (var field in notes[id].fields)
+            if (notes.ContainsKey(id))
             {
-                Console.WriteLine($"{field.Key}: {field.Value}");
+                Console.WriteLine("--------------------------------------");
+                Console.WriteLine("ID: " + id);
+                foreach (var field in notes[id].fields)
+                {
+                    Console.WriteLine($"{field.Key}: {field.Value}");
+                }
+                Console.WriteLine("--------------------------------------");
             }
-            Console.WriteLine("--------------------------------------");
+            else
+            {
+                Console.WriteLine("Запись не найдена!");
+            }
         }
 
         static void ShowAllNotes(Dictionary<int, Note> notes)
@@ -110,9 +96,29 @@ namespace lab_1
                 Console.WriteLine("ID: " + note.Key);
                 foreach (var field in note.Value.fields)
                 {
-                    Console.WriteLine($"{field.Key}: {field.Value}");
+                    if (!String.IsNullOrEmpty(field.Value))
+                    {
+                        Console.WriteLine($"{field.Key}: {field.Value}");
+                    }
                 }
                 Console.WriteLine("--------------------------------------");
+            }
+        }
+
+        static int ReadId()
+        {
+            int id;
+            while(true)
+            {
+                string input = Console.ReadLine();
+                if (!Int32.TryParse(input, out id))
+                {
+                    Console.WriteLine("Ошибка! ID введен некорректно. Попробуйте снова: ");
+                }
+                else
+                {
+                    return Int32.Parse(input);
+                }
             }
         }
 
@@ -148,20 +154,22 @@ namespace lab_1
 
                     case "2": // Удаление существующей записи
                         Console.Clear();
-                        id = Int32.Parse(Console.ReadLine());
+                        Console.WriteLine("Введите ID записи для удаления: ");
+                        id = ReadId();
                         RemoveNote(notes, id);
                         break;
 
                     case "3": // Редактирование существующей записи
                         Console.Clear();
                         Console.WriteLine("Введите ID записи для редактирования: ");
-                        id = Int32.Parse(Console.ReadLine());
+                        id = ReadId();
                         EditNote(notes, id);
                         break;
 
                     case "4": // Вывод на экран одной записи
                         Console.Clear();
-                        id = Int32.Parse(Console.ReadLine());
+                        Console.WriteLine("Введите ID записи: ");
+                        id = ReadId();
                         ReadNote(notes, id);
                         break;
 
@@ -183,7 +191,8 @@ namespace lab_1
     }
 }
 
-/*
+/* TODO
  * Добавить защиту от дурака при вводе - переделать ввод ID
- * Переделать вывод информации записи
+ * Проверка телефона - состоит только из цифр
+ * Переделать вывод информации записи - DONE
  */
