@@ -10,122 +10,11 @@ namespace lab_1
         {
             UserInterface(ref Notebook.notes);
         }
-        static Note CreateNote()
-        {
-            Note note = new Note();
-            
-            foreach(var field in Note.fieldsList) // Добавление полей в запись
-            {
-                Console.WriteLine(field.Key + ": ");
-                note.fields.Add(field.Key, CreateField(field.Value));
-            }
-            Console.Clear();
-            return note;
-        }
 
-        static void RemoveNote(Dictionary<int, Note> notes, int id)
-        {
-            notes.Remove(id);
-            Console.WriteLine("Запись с ID " + id + " успешно удалена.");
-        }
-
-        static void EditNote(Dictionary<int, Note> notes, int id)
-        {
-            Console.WriteLine("Введите поле которое нужно редактировать: ");
-            while(true)
-            {
-                string field = Console.ReadLine();
-                if (notes[id].fields.ContainsKey(field))
-                {
-                    Console.WriteLine("Введите новое значение поля: ");
-                    notes[id].fields[field] = Console.ReadLine();
-                    break;
-                }
-                else
-                {
-                    Console.WriteLine("Данного поля не существует. Попробуйте снова: ");
-                }
-            }
-        }
-        public static string CreateField(bool isRequired)
-        {
-            if (isRequired)
-            {
-                while (true)
-                {
-                    string field = Console.ReadLine(); 
-                    if (String.IsNullOrEmpty(field)) // Проверка корректности введенной строки 
-                    {
-                        Console.WriteLine("Ошибка! Поле является обязательным");
-                    }
-                    else
-                    {
-                        return field;
-                    }
-                }
-            }
-            else
-            {
-                return Console.ReadLine();
-            }
-        }
-
-        static void ReadNote(Dictionary<int, Note> notes, int id = 0)
-        {
-            if (notes.ContainsKey(id))
-            {
-                Console.WriteLine("--------------------------------------");
-                Console.WriteLine("ID: " + id);
-                foreach (var field in notes[id].fields)
-                {
-                    Console.WriteLine($"{field.Key}: {field.Value}");
-                }
-                Console.WriteLine("--------------------------------------");
-            }
-            else
-            {
-                Console.WriteLine("Запись не найдена!");
-            }
-        }
-
-        static void ShowAllNotes(Dictionary<int, Note> notes)
-        {
-            foreach (var note in notes)
-            {
-                Console.WriteLine("--------------------------------------");
-                Console.WriteLine("ID: " + note.Key);
-                foreach (var field in note.Value.fields)
-                {
-                    if (!String.IsNullOrEmpty(field.Value))
-                    {
-                        Console.WriteLine($"{field.Key}: {field.Value}");
-                    }
-                }
-                Console.WriteLine("--------------------------------------");
-            }
-        }
-
-        static int ReadId()
-        {
-            int id;
-            while(true)
-            {
-                string input = Console.ReadLine();
-                if (!Int32.TryParse(input, out id))
-                {
-                    Console.WriteLine("Ошибка! ID введен некорректно. Попробуйте снова: ");
-                }
-                else
-                {
-                    return Int32.Parse(input);
-                }
-            }
-        }
-
-        static void UserInterface(ref Dictionary <int, Note> notes)
+        static void UserInterface(ref Dictionary<int, Note> notes)
         {
             Console.WriteLine("Добро пожаловать в записную книжку.");
-            while(true)
+            while (true)
             {
                 Console.WriteLine("Выберите действие: ");
                 Console.WriteLine("1) Добавить новую запись");
@@ -135,7 +24,7 @@ namespace lab_1
                 Console.WriteLine("5) Просмотр всех существующих записей");
                 Console.WriteLine("6) Выйти из программы");
                 string action = Console.ReadLine();
-                switch(action)
+                switch (action)
                 {
                     case "1": // Добавление новой записи
                         Console.Clear();
@@ -143,7 +32,7 @@ namespace lab_1
                         int id;
                         while (true) // Проверка на уникальность индетификатора 
                         {
-                            id = rnd.Next(100000, 1000000); 
+                            id = rnd.Next(100000, 1000000);
                             if (!notes.ContainsKey(id)) // Если словарь еще не содержит запись с данным ID, то используем этот ID
                             {
                                 break;
@@ -183,16 +72,183 @@ namespace lab_1
                         return;
 
                     default:
+                        Console.Clear();
                         Console.WriteLine("Некорректный ввод. Попробуйте снова.");
                         break;
                 }
-            }   
+            }
+        }
+
+        static Note CreateNote()
+        {
+            Note note = new Note();
+            
+            foreach(var field in Note.fieldsList) // Добавление полей в запись
+            {
+                Console.WriteLine(field.Key + ": ");
+                while (true)
+                {
+                    string value = CreateField(field.Value);
+                    if (field.Key.Equals("Телефон"))
+                    {
+                        if (!CheckNumber(value))
+                        {
+                            Console.WriteLine("Телефон должен содержать только цифры! Попробуйте снова: ");
+                        }
+                        else
+                        {
+                            note.fields.Add(field.Key, value);
+                            break;
+                        }
+
+                    }
+                    else
+                    {
+                        note.fields.Add(field.Key, value);
+                        break;
+                    }
+                }
+                
+            }
+            Console.Clear();
+            return note;
+        }
+
+        static bool CheckNumber(string number)
+        {
+            foreach(char c in number)
+            {
+                if (c < '0' || c > '9')
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        static void RemoveNote(Dictionary<int, Note> notes, int id)
+        {
+            if (notes.ContainsKey(id))
+            {
+                notes.Remove(id);
+                Console.WriteLine("Запись с ID " + id + " успешно удалена.");
+            }
+            else
+            {
+                Console.WriteLine("Ошибка! Запись с ID " + id + " не найдена.");
+            }
+        }
+
+        static void EditNote(Dictionary<int, Note> notes, int id)
+        {
+            if (notes.ContainsKey(id))
+            {
+                Console.WriteLine("Введите поле которое нужно редактировать: ");
+                while (true)
+                {
+                    string field = Console.ReadLine();
+                    if (notes[id].fields.ContainsKey(field))
+                    {
+                        Console.WriteLine("Введите новое значение поля: ");
+                        notes[id].fields[field] = Console.ReadLine();
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Данного поля не существует. Попробуйте снова: ");
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("Ошибка! Запись с ID " + id + " не найдена.");
+            }
+        }
+        public static string CreateField(bool isRequired)
+        {
+            if (isRequired)
+            {
+                while (true)
+                {
+                    string field = Console.ReadLine(); 
+                    if (String.IsNullOrEmpty(field) || field.Equals(" ")) // Проверка корректности введенной строки 
+                    {
+                        Console.WriteLine("Ошибка! Поле является обязательным");
+                    }
+                    else
+                    {
+                        return field;
+                    }
+                }
+            }
+            else
+            {
+                return Console.ReadLine();
+            }
+        }
+
+        static void ReadNote(Dictionary<int, Note> notes, int id = 0)
+        {
+            if (notes.ContainsKey(id))
+            {
+                Console.WriteLine("--------------------------------------");
+                Console.WriteLine("ID: " + id);
+                foreach (var field in notes[id].fields)
+                {
+                    Console.WriteLine($"{field.Key}: {field.Value}");
+                }
+                Console.WriteLine("--------------------------------------");
+            }
+            else
+            {
+                Console.WriteLine("Запись не найдена!");
+            }
+        }
+
+        static void ShowAllNotes(Dictionary<int, Note> notes)
+        {
+            if (notes.Count == 0)
+            {
+                Console.WriteLine("В записной книжке еще нет ни одной записи!");
+            }
+            else
+            {
+                foreach (var note in notes)
+                {
+                    Console.WriteLine("--------------------------------------");
+                    Console.WriteLine("ID: " + note.Key);
+                    foreach (var field in note.Value.fields)
+                    {
+                        if (!String.IsNullOrEmpty(field.Value) && !field.Value.Equals(" "))
+                        {
+                            Console.WriteLine($"{field.Key}: {field.Value}");
+                        }
+                    }
+                    Console.WriteLine("--------------------------------------");
+                }
+            }
+        }
+
+        static int ReadId()
+        {
+            int id;
+            while (true)
+            {
+                string input = Console.ReadLine();
+                if (!Int32.TryParse(input, out id))
+                {
+                    Console.WriteLine("Ошибка! ID введен некорректно. Попробуйте снова: ");
+                }
+                else
+                {
+                    return Int32.Parse(input);
+                }
+            }
         }
     }
 }
 
 /* TODO
- * Добавить защиту от дурака при вводе - переделать ввод ID
- * Проверка телефона - состоит только из цифр
+ * Добавить защиту от дурака при вводе - переделать ввод ID - DONE
+ * Проверка телефона - состоит только из цифр   
  * Переделать вывод информации записи - DONE
  */
